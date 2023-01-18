@@ -21,6 +21,8 @@ public class Main {
 		List<User> userList = List.of(user, user2, user3, user4);
 		List<String> names = new ArrayList<String>();
 		
+		
+		
 		while(true) {
 			System.out.println("Write input: ");
 			String userInput = scanner.nextLine();
@@ -81,8 +83,8 @@ public class Main {
 					System.out.println(getName.apply(user));
 					break; 
 					
-				case "name function": //not working - why??
-					Function<User, String> toName = (User tmpUser) -> user.getName(); 
+				case "name function": 
+					Function<User, String> toName = (User tmpUser) -> tmpUser.getName(); 
 					
 					for (User tmpUser : userList) {
 						String name = toName.apply(tmpUser);
@@ -91,6 +93,24 @@ public class Main {
 					userList.forEach(u -> System.out.println(u));
 					names.forEach(y -> System.out.println(y)); //It magically knows it's a String instead of a User?
 					break;
+				case "chaining":
+					Consumer<String> chain1 = chainString1 -> System.out.println("Hello " + chainString1); 
+					Consumer<String> chain2 = chainString2 -> System.err.println("Hello " + chainString2); //Something about System.err being able to write to a file?? 
+					Consumer<String> chain3 = chain1.andThen(chain2); 
+					chain3.accept("Bob");
+					break; 
+				case "empty predicate": 
+					Predicate<String> isNull = whatever -> whatever == null; 
+					System.out.println("Time to try a null? " + isNull.test(null));
+					
+					Predicate<String> isEmpty = thisever -> thisever.isEmpty(); 
+					System.out.println("Thisever empty? " + isEmpty.test(""));
+					
+					Predicate<String> p = isNull.negate().and(isEmpty.negate()); 
+					System.out.println("Time to try a something? " + p.test(null));
+					System.out.println("Time to try for something? " + p.test(""));
+					System.out.println("Time to try for something? " + p.test("YES"));
+					
 				default: 
 					break; 
 			
